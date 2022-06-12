@@ -21,8 +21,8 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={'':'fluids'},
-    packages=setuptools.find_packages(where='fluids'),
+    #package_dir={'':'fluids'},
+    #packages=setuptools.find_packages(where='fluids'),
     python_requires='>=3.8',
     install_requires=[
         'CoolProp',
