@@ -8,6 +8,7 @@ setuptools.setup(
     version='0.0.1',
     author='Wolfgang Meiners',
     author_email='wolfgangmeiners@googlemail.com',
+    packages=['fluids'],
     description='Use Properties of Fluids in Jupyter Notebooks',
     long_description=long_description,
     long_description_content_type='text/markdown',
