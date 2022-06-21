@@ -211,9 +211,8 @@ class HAPoint_of_State(Point_of_State):
     def __init__(self,name=None, **kwargs):
         self.name = name
         
-        # P is in list of kwargs or defaults to self._P
-        # HAPoint_of_State._P is defined in fluid_factory(...)
-        # but can be overwritten here
+        # P is in list of kwargs or defaults to self._P_default
+        # HAPoint_of_State._P_default is defined in fluid_factory(...)
         P = kwargs.pop('P',self._P_default)
         
         # in some cases the dict of kwargs has to be changed.
