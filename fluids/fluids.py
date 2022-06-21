@@ -75,8 +75,9 @@ class Point_of_State(ABC):
             or CP.HAPropsSI depending on the
             used class
         '''
-        if not arg in self.acceptable_args:
-            raise Exception('dont know property {arg}')
+        # seems this never happens
+        #if not arg in self.acceptable_args:
+        #    raise Exception(f'dont know property {arg}')
         
         v = getattr(self, f'_{arg}',None)
         if v is None:
@@ -91,7 +92,7 @@ class Point_of_State(ABC):
             and define q as property of cls
         '''
         if q in cls.acceptable_args:
-            raise Exception('Property {q} is already registered in {__class__}')
+            raise Exception(f'Property {q} is already registered in {__class__}')
         cls.acceptable_args[q]=u
         setattr(cls,q,property(lambda self, arg=q: self._generic_property(arg)))
             
@@ -101,7 +102,7 @@ class Point_of_State(ABC):
             and delete property q from cls
         '''
         if not q in cls.acceptable_args:
-            raise Exception('Property {q} not found in {__class__}')
+            raise Exception(f'Property {q} not found in {__class__}')
         del cls.acceptable_args[q]
         delattr(cls,q)
         
