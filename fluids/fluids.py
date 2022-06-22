@@ -204,6 +204,34 @@ class HAPoint_of_State(Point_of_State):
         A point of state of humid air is defined by exactly three variables
         of state. One of these variables always is the pressure P which defaults
         to P = 101325 Pa. 
+        
+        HAPoint_of_State can be instanciated i.e. by
+        
+        HA = fluid_factory('HumidAir',P_default=1e5)
+        HA_u = fluid_factory('HumidAir',with_units=True)
+        
+        p_0 = HA(T=T_0+20, R=50e-2, P=95000, name='P_0')
+        #or, with P=P_default
+        p_1 = HA(T=T_0+20, R=50e-2,name='P_1')
+        
+        if P_default is ommited, it defaults to p_amb=101325 (Pa)
+        This means
+        HA_def = fluid_factory('HumidAir')
+        p_2 = HA_def(T=T_0+20, R=50e-2,name='P_2') # P = 101325 (Pa)
+        
+        If the class is defined with units:
+        p_0u = HA_u(T=Q_(20,'degC'),R=Q_(50,'percent'), P=Q_(95000,'Pa'),name='P_0u')
+        
+        P always has to be one arg of a Point of State of Humid Air. It default to
+        P_default if not given.
+        
+        Once a Point of State p is defined, its properties can be read:
+        p_0.T # 293.15 (K)
+        p_0.R # 50e-2
+        p_0.H # Value of H for p_0
+        p_0.args # all Properties as dict
+        
+        p_0u.args # all Properties as dict of Quantities
     '''
     
     _generic_function = CP.HAPropsSI
