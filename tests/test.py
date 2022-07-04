@@ -27,6 +27,19 @@ class Test_Q_(unittest.TestCase):
         return self.assertEqual(Q_(1000,'ppM').bv, 0.001)
     
 
+class Point(Point_of_State):
+    @staticmethod
+    def _generic_function(*args):
+        return args
+    
+Point.acceptable_args = dict()
+Point.register('x','unit_of_x')
+    
+class Test_Point_of_State(unittest.TestCase):
+    
+    def test_Point_of_State_property_x(self):
+        p = Point(a='va',b='vb',c='vc')
+        return self.assertEqual(p.x, ('x', 'a', 'va', 'b', 'vb', 'c', 'vc'))
 
 class Test_fluid_factory(unittest.TestCase):
     
