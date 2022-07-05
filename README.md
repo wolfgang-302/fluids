@@ -10,8 +10,10 @@ and
 
 `CoolProp.CoolProp.HAPropsSI`
 
+For reference see http://www.coolprop.org/
 
-If you want to determine the properties of a fluid, e.g. Air, `fluids` can be used in the following way:
+
+If you want to determine the properties of a fluid like Air, `fluids` can be used in the following way:
 
 
 ```python
@@ -19,7 +21,7 @@ from fluids import fluid_factory
 Air = fluid_factory('Air')
 ```
 
-The properties of Air for $T=273.15\,\mathrm{K}$, $P=100 000\,\mathrm{Pa}$ are found by
+The properties of Air for a temperature of $T=273.15\,\mathrm{K}$, and a pressure of $P=100 000\,\mathrm{Pa}$ are found by
 
 
 ```python
@@ -84,6 +86,12 @@ point.args
 
 
 
+A list of all available properties can be found following the link
+
+http://www.coolprop.org/coolprop/HighLevelAPI.html#table-of-string-inputs-to-propssi-function
+
+
+
 In `fluids` it is possible to use units (based on the module `pint`):
 
 
@@ -124,7 +132,7 @@ point_with_units.args
 
 
 
-It is possible to pretty print the properties:
+It is possible to pretty print the result:
 
 
 ```python
@@ -152,16 +160,16 @@ for k,v in point_with_units.args.items():
 
 ## Humid Air
 
-Humid Air is a special case. The corresponding function is `CoolProp.CoolProp.HAPropsSI`
+Humid Air is a special case of a fluid. The corresponding function is `CoolProp.CoolProp.HAPropsSI`
 
-To determine a point of state of humid air, exactly three values are needed. One of this values must be the total pressure `P`. The default is `P = 101325` (Pa) if no value for P is defined.
+To determine a point of state of humid air, exactly three values are needed. One of this values must be the total pressure `P`. The default value for the pressure is `P = 101325` (Pa) if no value for P is defined.
 
-To find the properties of humid air for T=20°C, R=50%, P=101325 Pa use
+To find the properties of humid air for temperature of T=20°C, a relative humidity of R=50% and a total pressure of P=101325 Pa use
 
 
 ```python
 HA = fluid_factory('HumidAir')
-point = HA(T=273.15+20,R=50e-2,name='point')
+point = HA(T=273.15+20,R=50e-2,name='point') # not nessecary to define P=101325
 point.args
 ```
 
@@ -190,7 +198,11 @@ point.args
 ```python
 # or, with units
 HAu = fluid_factory('HumidAir',with_units=True)
-point_with_units = HAu(T=Q_(20,'degC'),R=Q_(50,'percent'),name='point_with_units')
+point_with_units = HAu(
+    T=Q_(20,'degC'),
+    R=Q_(50,'percent'), # or R=0.5
+    name='point_with_units'
+) # not nessecary to define P=Q_(101325,'Pa')
 point_with_units.args
 ```
 
@@ -213,4 +225,149 @@ point_with_units.args
      'P_w': 1174.488985425371 <Unit('pascal')>,
      'psi_w': 0.011591305062179829 <Unit('dimensionless')>}
 
+
+
+As for other fluids it is possible to register additional properties. A list of properties of humid air can be found following the link
+
+http://www.coolprop.org/fluid_properties/HumidAir.html#table-of-inputs-outputs-to-hapropssi
+
+
+
+```python
+HAu.register('Cha','J/kg/K') # Mixture specific heat per unit humid air
+point_with_units.args
+```
+
+
+
+
+    {'P': 101325.0 <Unit('pascal')>,
+     'W': 0.007293697701992549 <Unit('dimensionless')>,
+     'T': 293.15 <Unit('kelvin')>,
+     'R': 0.5 <Unit('dimensionless')>,
+     'H': 38622.83892391293 <Unit('joule / kilogram')>,
+     'S': 139.97016819060187 <Unit('joule / kelvin / kilogram')>,
+     'B': 286.92646885824075 <Unit('kelvin')>,
+     'D': 282.42442581534783 <Unit('kelvin')>,
+     'Vda': 0.8398598461778416 <Unit('meter ** 3 / kilogram')>,
+     'Vha': 0.8337785177191823 <Unit('meter ** 3 / kilogram')>,
+     'M': 1.814316044123345e-05 <Unit('pascal * second')>,
+     'K': 0.025866132503697774 <Unit('watt / kelvin / meter')>,
+     'C': 1019.8524499561333 <Unit('joule / kelvin / kilogram')>,
+     'P_w': 1174.488985425371 <Unit('pascal')>,
+     'psi_w': 0.011591305062179829 <Unit('dimensionless')>,
+     'Cha': 1012.4678157748747 <Unit('joule / kelvin / kilogram')>}
+
+
+
+### Define default pressure for Humid Air
+
+If a default pressure different from `Q_(101325,'Pa')` is needed, this can be archieved by:
+
+`HA = fluid_factory('HumidAir',P_default=95000)`
+
+or
+
+`HA = fluid_factory('HumidAir',with_units=True, P_default=Q_(95000,'Pa'))`
+
+
+```python
+HA = fluid_factory('HumidAir',with_units=True, P_default=Q_(95000,'Pa'))
+```
+
+
+```python
+point = HA(T=Q_(20,'degC'),R=50e-2,name='point')
+point.args
+```
+
+
+
+
+    {'P': 95000.0 <Unit('pascal')>,
+     'W': 0.007783888419487314 <Unit('dimensionless')>,
+     'T': 293.15 <Unit('kelvin')>,
+     'R': 0.5 <Unit('dimensionless')>,
+     'H': 39882.038958452504 <Unit('joule / kilogram')>,
+     'S': 163.14630978463654 <Unit('joule / kelvin / kilogram')>,
+     'B': 286.76917718799103 <Unit('kelvin')>,
+     'D': 282.42467768085453 <Unit('kelvin')>,
+     'Vda': 0.896495138629698 <Unit('meter ** 3 / kilogram')>,
+     'Vha': 0.8895708186362018 <Unit('meter ** 3 / kilogram')>,
+     'M': 1.8137145921054082e-05 <Unit('pascal * second')>,
+     'K': 0.025861409942910148 <Unit('watt / kelvin / meter')>,
+     'C': 1020.6665065054794 <Unit('joule / kelvin / kilogram')>,
+     'P_w': 1174.266281013783 <Unit('pascal')>,
+     'psi_w': 0.012360697694881927 <Unit('dimensionless')>}
+
+
+
+The default pressure is only used, if no pressure is defined:
+
+
+```python
+point_2 = HA(
+    T=Q_(20,'degC'),
+    R=50e-2,
+    P=Q_(2,'bar'), # different from default of Q_(95000,'Pa')
+    name='point_2'
+)
+point_2.args
+```
+
+
+
+
+    {'P': 200000.0 <Unit('pascal')>,
+     'W': 0.003684810641674053 <Unit('dimensionless')>,
+     'T': 293.15 <Unit('kelvin')>,
+     'R': 0.5 <Unit('dimensionless')>,
+     'H': 29228.736705025192 <Unit('joule / kilogram')>,
+     'S': -90.00061952241548 <Unit('joule / kelvin / kilogram')>,
+     'B': 288.61554630908495 <Unit('kelvin')>,
+     'D': 282.4203286674543 <Unit('kelvin')>,
+     'Vda': 0.42290250683411085 <Unit('meter ** 3 / kilogram')>,
+     'Vha': 0.42134991219379075 <Unit('meter ** 3 / kilogram')>,
+     'M': 1.8193129789730992e-05 <Unit('pascal * second')>,
+     'K': 0.02591390134464176 <Unit('watt / kelvin / meter')>,
+     'C': 1014.729336766021 <Unit('joule / kelvin / kilogram')>,
+     'P_w': 1177.9523862185358 <Unit('pascal')>,
+     'psi_w': 0.005889761931092679 <Unit('dimensionless')>}
+
+
+
+Usually, not all properties of a point of state are needed. To get the specific enthalpy `H` from `point_2`, type 
+
+
+```python
+point_2.H
+```
+
+
+
+
+29228.736705025192 joule/kilogram
+
+
+
+
+```python
+# or, i.e.
+point_2.H.to('kJ/kg').round(2)
+```
+
+
+
+
+29.23 kilojoule/kilogram
+
+
+
+
+```python
+# or
+print(f"H = {point_2.H.to('kJ/kg').round(2):~P}")
+```
+
+    H = 29.23 kJ/kg
 
