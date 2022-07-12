@@ -257,6 +257,8 @@ class HAPoint_of_State(Point_of_State):
         if 'W' in kwargs and 'R' in kwargs:
             # to combine W and R is not possible in CoolProps.HumidAir
             # work around this by replacing W by psi_w
+            # I found this workaround as comment from
+            # srnogueira on https://github.com/CoolProp/CoolProp/issues/2032
             del arg_dict['W']
             W = self._W = kwargs['W']
             arg_dict['psi_w'] = W/(epsilon+W)
@@ -264,6 +266,9 @@ class HAPoint_of_State(Point_of_State):
         if 'D' in kwargs and 'R' in kwargs:
             # to combine D and R is not possible in CoolProps.HumidAir
             # work around this by replacing D by psi_w
+            # because D should define psi_w and this should
+            # be independent of T. So any value of T can be used
+            # as dummy Temperature to determine psi_w from (D,T,P)
             del arg_dict['D']
             D = self._D = kwargs['D']
             
