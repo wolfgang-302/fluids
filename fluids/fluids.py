@@ -7,6 +7,9 @@ import CoolProp.CoolProp as CP
 from pint import UnitRegistry
 ureg = UnitRegistry()
 
+# set default printing format
+ureg.default_format = "~P"
+
 # percent and part per Million (ppM) are frequently used in HVAC
 ureg.define('percent=1e-2=%')
 ureg.define('ppM=1e-6')
