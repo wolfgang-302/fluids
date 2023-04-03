@@ -5,4 +5,6 @@ from .fluids import (
     Q_,
     p_amb,
     T_0,
+    ha_subset,
+    fluids_subset,
 )
