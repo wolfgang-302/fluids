@@ -380,6 +380,11 @@ class Units():
 
         return {k:get_kwarg(v) for k,v in kwargs.items()}
         
+    def displ(self,dct):
+        ''' print the results to stdout using subset_to(**dct) '''
+        print(self.name)
+        for k,v in self.subset_to(**dct).items():
+            print(f'{k:>5} = {v}')
 
 
 def fluid_factory(fluid,with_units=False,**kwargs):
@@ -410,3 +415,22 @@ def fluid_factory(fluid,with_units=False,**kwargs):
             ThisFluid.register(k,v)
         
     return ThisFluid
+
+
+ha_subset = dict(
+    t=dict(q='T',u='degC',n=1),
+    phi=dict(q='R',u='percent',n=1),
+    x=dict(q='W',u='g/kg',n=2),
+    h=dict(q='H',u='kJ/kg',n=1),
+    v_l=dict(q='Vda',u='m**3/kg',n=3)
+)
+
+fluids_subset = dict(
+    p = dict(q='P',u='bar',n=3),     # Druck in bar
+    t = dict(q='T',u='degC',n=1),    # Temperatur in °C
+    h = dict(q='H',u='kJ/kg',n=2),   # Enthalpie in kJ/kg Kältemittel
+    Q = dict(q='Q',n=3),             # Dampfgehalt
+    s = dict(q='S',u='kJ/kg/K',n=2), # Entropie
+    D = dict(q='D',n=3)              # Dichte
+)
+
