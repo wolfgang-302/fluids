@@ -8,7 +8,8 @@ from pint import UnitRegistry
 ureg = UnitRegistry()
 
 # set default printing format
-ureg.default_format = "~P"
+#ureg.default_format = "~P"
+ureg.formatter.default_format = "~P"
 
 # percent and part per Million (ppM) are frequently used in HVAC
 ureg.define('percent=1e-2=%')
@@ -186,7 +187,12 @@ class Fluid(Point_of_State):
     #_fluid = None
     # acceptable_args is defined in fluid_factory(...)
     #acceptable_args = None 
-    _generic_function = CP.PropsSI
+    #_generic_function = CP.PropsSI
+    @staticmethod
+    def _generic_function(*args):
+        ''' this is the concrete function CP.PropsSi '''
+        return CP.PropsSI(*args)
+
     
     def __init__(self,name=None, **kwargs):
         self.name = name
@@ -237,8 +243,13 @@ class HAPoint_of_State(Point_of_State):
         p_0u.args # all Properties as dict of Quantities
     '''
     
-    _generic_function = CP.HAPropsSI
-    
+    #_generic_function = CP.HAPropsSI
+    @staticmethod
+    def _generic_function(*args):
+        ''' this is for CP.PropsSi '''
+        return CP.HAPropsSI(*args)
+
+
     def __init__(self,name=None, **kwargs):
         self.name = name
         
