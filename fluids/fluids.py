@@ -1,4 +1,4 @@
-from abc import ABC, abstractstaticmethod
+from abc import ABC, abstractmethod # abstractstaticmethod
 
 import CoolProp.CoolProp as CP
 
@@ -54,7 +54,9 @@ class Point_of_State(ABC):
         self._arg_list = [v for t in kwargs.items() for v in t]
         
     # this is implemented in derived classes
-    @abstractstaticmethod
+    #@abstractstaticmethod
+    @staticmethod
+    @abstractmethod
     def _generic_function(*args):
         ''' for humid air this is CP.HAPropsSI, 
             for other fluids defined in CoolProps
@@ -187,11 +189,12 @@ class Fluid(Point_of_State):
     #_fluid = None
     # acceptable_args is defined in fluid_factory(...)
     #acceptable_args = None 
-    #_generic_function = CP.PropsSI
-    @staticmethod
-    def _generic_function(*args):
-        ''' this is the concrete function CP.PropsSi '''
-        return CP.PropsSI(*args)
+    
+    _generic_function = staticmethod(CP.PropsSI)
+    #@staticmethod
+    #def _generic_function(*args):
+    #    ''' this is the concrete function CP.PropsSi '''
+    #    return CP.PropsSI(*args)
 
     
     def __init__(self,name=None, **kwargs):
@@ -243,11 +246,11 @@ class HAPoint_of_State(Point_of_State):
         p_0u.args # all Properties as dict of Quantities
     '''
     
-    #_generic_function = CP.HAPropsSI
-    @staticmethod
-    def _generic_function(*args):
-        ''' this is for CP.PropsSi '''
-        return CP.HAPropsSI(*args)
+    _generic_function = staticmethod(CP.HAPropsSI)
+    #@staticmethod
+    #def _generic_function(*args):
+    #    ''' this is for CP.PropsSi '''
+    #    return CP.HAPropsSI(*args)
 
 
     def __init__(self,name=None, **kwargs):
